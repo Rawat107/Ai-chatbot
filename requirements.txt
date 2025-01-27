@@ -1,0 +1,7 @@
+flask==2.3.3
+openai==0.28.0
+flask-cors==3.0.10
+pymongo==4.5.0         # For MongoDB (use if you're using MongoDB)
+# psycopg2-binary==2.9.8 # For PostgreSQL (use if you're using SQL with PostgreSQL)
+# mysql-connector-python==8.1.0 # For MySQL (use if you're using SQL with MySQL)
+python-dotenv==1.0.0   
