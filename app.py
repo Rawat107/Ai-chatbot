@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv
 from openai import OpenAI
 import json
@@ -7,7 +7,7 @@ from pymongo import MongoClient
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', static_url_path='/static')
 
 client = OpenAI(api_key = os.getenv("OPENAI_API_KEY"))
 
@@ -16,7 +16,7 @@ db = mongo_client.chatbot
 collection = db.logs
 
 with open("models/model_prompts.json") as f:
-    model_prompts = json.loads(f)
+    model_prompts = json.load(f)
 
 
 
@@ -24,12 +24,12 @@ def query_openai(prompt):
     try:
         completion = client.chat.completions.create(
             model='gpt-4o-mini',
-            messages=[{"role": "user", "content": prompt}]
+            messages=[{"role": "user", "content": prompt}],
             max_tokens=300,
             temperature=0.7,
             top_p = 1,
-            frequency_penalty=0
-            presence_penalty=0
+            frequency_penalty=0,
+            presence_penalty=0,
         )
         return completion.choices[0].message["content"]
     except Exception as e:
@@ -60,7 +60,7 @@ def save_to_db(user_input, model, response):
 
 @app.route('/')
 def home():
-    return 'AI chatbot is running'
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
